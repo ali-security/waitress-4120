@@ -16,6 +16,7 @@ jobs:
                 architecture: ['x64']
         name: "Python: ${{ matrix.tox.py }}"
         steps:
+            - run: brew install gettext
             - uses: actions/checkout@master
             - name: Setup python
               uses: MatteoH2O1999/setup-python@v4
