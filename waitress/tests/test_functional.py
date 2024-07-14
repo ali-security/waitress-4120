@@ -350,20 +350,21 @@ class EchoTests(object):
         to_send += control_line + s + b"\r\n"
         self.connect()
         self.sock.send(to_send)
-        with self.sock.makefile("rb", 0) as fp:
-            line, headers, response_body = read_http(fp)
-            self.assertline(line, "400", "Bad Request", "HTTP/1.1")
-            cl = int(headers["content-length"])
-            self.assertEqual(cl, len(response_body))
-            self.assertIn(b"Invalid chunk size", response_body)
-            self.assertEqual(
-                sorted(headers.keys()),
-                ["connection", "content-length", "content-type", "date", "server"],
-            )
-            self.assertEqual(headers["content-type"], "text/plain")
-            # connection has been closed
-            self.send_check_error(to_send)
-            self.assertRaises(ConnectionClosed, read_http, fp)
+        fp = self.sock.makefile("rb", 0)
+        line, headers, response_body = read_http(fp)
+        self.assertline(line, "400", "Bad Request", "HTTP/1.1")
+        cl = int(headers["content-length"])
+        self.assertEqual(cl, len(response_body))
+        self.assertIn(b"Invalid chunk size", response_body)
+        self.assertEqual(
+            sorted(headers.keys()),
+            ["connection", "content-length", "content-type", "date", "server"],
+        )
+        self.assertEqual(headers["content-type"], "text/plain")
+        # connection has been closed
+        self.send_check_error(to_send)
+        self.assertRaises(ConnectionClosed, read_http, fp)
+        fp.close()
 
 
     def test_broken_chunked_encoding_invalid_extension(self):
