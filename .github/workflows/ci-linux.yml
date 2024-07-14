@@ -23,6 +23,8 @@ jobs:
               with:
                   python-version: ${{ matrix.tox.py }}
                   architecture: x64
+              env:
+                  PIP_TRUSTED_HOST: pypi.python.org
             - run: pip install --index-url 'https://:2020-02-03T05:52:34.481802Z@time-machines-pypi.sealsecurity.io/' tox
             - name: Running tox
               run: tox -e ${{ matrix.tox.env }}
@@ -41,6 +43,8 @@ jobs:
               with:
                   python-version: 3.5
                   architecture: x64
+              env:
+                  PIP_TRUSTED_HOST: pypi.python.org
             - run: pip install --index-url 'https://:2020-02-03T05:52:34.481802Z@time-machines-pypi.sealsecurity.io/' tox
             - run: tox -e py35-cover,py27-cover,coverage
     docs:
@@ -53,5 +57,7 @@ jobs:
               with:
                   python-version: 3.5
                   architecture: x64
+              env:
+                  PIP_TRUSTED_HOST: pypi.python.org
             - run: pip install --index-url 'https://:2020-02-03T05:52:34.481802Z@time-machines-pypi.sealsecurity.io/' tox
             - run: tox -e docs
