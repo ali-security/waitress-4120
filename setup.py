@@ -30,6 +30,7 @@ docs_extras = [
 testing_extras = [
     "nose",
     "coverage>=5.0",
+    "pytest"
 ]
 
 setup(
